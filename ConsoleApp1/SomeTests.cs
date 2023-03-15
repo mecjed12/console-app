@@ -7,7 +7,7 @@ namespace ConsoleApp1
     {
         public static void SomeExamples()
         {
-            User obj = new User();
+            //User obj = new User();
             //CheckUserName(Environment.UserName);
             //CheckUserName(obj.Username);
             //CheckUserName(obj);

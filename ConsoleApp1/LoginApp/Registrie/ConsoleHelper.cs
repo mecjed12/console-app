@@ -14,10 +14,12 @@ namespace ConsoleApp1.LoginApp.UserMethoden
         {          
             return Convert.ToInt32(number);
         }
+
         public int IntConvertor_Int(int number)
         {
             return Convert.ToInt32(number);
         }
+
 
         public ConsoleKeyInfo ReadKey()
         {
@@ -35,13 +37,14 @@ namespace ConsoleApp1.LoginApp.UserMethoden
             Printer($"Willkomen : {name}");
             Printer($"Der Username ist : {name} \nUnd ihr Passwort ist : {password}");            
         }
+
         public void PrintAllUsers (List<User> StoredUsers)
         {
             if(StoredUsers != null && StoredUsers.Count > 0)
             {
                 foreach (User user in StoredUsers)
                 {
-                    Console.WriteLine($"Username : {user.UserProperties.Username}, Passwort : {user.UserProperties.Password} ");
+                    Console.WriteLine($"Username : {user.GetUserName()}, Passwort : {user.GetPassword()} ");
                 }
             }
             else

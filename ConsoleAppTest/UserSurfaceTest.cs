@@ -20,15 +20,33 @@ namespace ConsoleAppTest
             consoleHelperMock.InSequence(sequence).Setup(o => o.ReadKey()).Returns(new ConsoleKeyInfo('\r', ConsoleKey.Enter, false, false, false));
             consoleHelperMock.InSequence(sequence).Setup(o => o.ReadKey()).Returns(new ConsoleKeyInfo('N', ConsoleKey.N, false, false, false));
             userOptionsMock.Setup(o => o.OptionSelector()).Returns(Options.NeuerUserRegestrieren);
-            UserInterface userSurface = new UserSurface(consoleHelperMock.Object, userServiceMock.Object, userOptionsMock.Object);
+            UserInterfaceAccessor userSurface = new UserInterfaceAccessor(consoleHelperMock.Object, userServiceMock.Object, userOptionsMock.Object);
 
             //act
 
-            userSurface.InitializeStart();
+            userSurface.PublicInitializeStart();
 
 
             //assert
            // userServiceMock.Verify(o => o.CreateUser(It.IsAny<List<User>>()), Times.Once);
+        }
+
+        private class UserInterfaceAccessor : UserInterface
+        {
+            public UserInterfaceAccessor(IConsoleHelper consoleHelper, IUserService userService, IUserOptions userOptions) 
+                : base(consoleHelper, userService, userOptions)
+            {
+            }
+
+            //protected override void InitializeStart()
+            //{
+
+            //}
+
+            public void PublicInitializeStart()
+            {
+                base.InitializeStart();
+            }
         }
     }
 }

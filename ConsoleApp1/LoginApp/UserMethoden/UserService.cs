@@ -19,9 +19,7 @@ namespace ConsoleApp1.LoginApp.UserMethoden
             var userName = registring.RegistryName();
             var password = registring.RegistryPassword();
             consoleHelper.Printer("Sie haben sich erfolgreich registriert");
-            var properties = new UserProperties(userName, password);
-            var newUser = new User(properties);
-            newUser._userProperties = new UserProperties("", 1);
+            var newUser = new User(userName, password);
             userList.Add(newUser);
         }
 
@@ -34,23 +32,44 @@ namespace ConsoleApp1.LoginApp.UserMethoden
                 return false;
             }
 
+            return PasswordCheckOver(user);
+        }
+
+        public  User FindUser(List<User> userList)
+        {
+            Thread.Sleep(1200);
+            string requestedUserName = consoleHelper.ReadInput();
+            foreach (var users in userList)
+            {
+                if (users.GetUserName() == requestedUserName)
+                {
+                    return users;
+                }
+            }
+            consoleHelper.Printer("Dieser User exestiert nicht");
+            return null;
+        }
+
+
+        public bool PasswordCheckOver(User user)
+        {
             consoleHelper.Printer("Bitte geben sie Jetz ihr passwort ein\n Sie haben 3 versuche");
-            int counter = 3;
-            for (int i = 0; i <= counter; i++)
+            for (int i = 0; i < 3; i++)
             {
                 try
                 {
                     var password = consoleHelper.IntConvertor_String(consoleHelper.ReadInput());
-                    if (password == user.UserProperties.Password)
+                    if (password == user.GetPassword())
                     {
                         break;
                     }
                     else
                     {
                         consoleHelper.Printer($"Sie haben das Passwort falsch eingegben bitte geben sie es erneut ein ");
-                        consoleHelper.Printer($"Sie haben noch {counter - i} versuche");
+                        consoleHelper.Printer($"Sie haben noch {3-i} versuche");
                     }
-                }catch(FormatException ex)
+                }
+                catch (FormatException ex)
                 {
                     string exceptionMessage = "Bitte geben Sie nummer ein ";
                     consoleHelper.Printer(exceptionMessage);
@@ -58,21 +77,6 @@ namespace ConsoleApp1.LoginApp.UserMethoden
             }
             consoleHelper.Printer("Sie haben sich erflogreich Angemeldet");
             return true;
-        }
-
-        public User FindUser(List<User> userList)
-        {
-            Thread.Sleep(1200);
-            string requestedUserName = consoleHelper.ReadInput();
-            foreach (var users in userList)
-            {
-                if (users.UserProperties.Username == requestedUserName)
-                {
-                    return users;
-                }
-            }
-            consoleHelper.Printer("Dieser User exestiert nicht");
-            return null;
         }
     }
 }

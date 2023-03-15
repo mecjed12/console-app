@@ -2,20 +2,25 @@
 {
     public class User
     {
-        private UserProperties _userProperties;
-
-        public string UserName => _userProperties.Username;
-        public int Password => _userProperties.Password;
-
+        private UserProperties UserProperties { get;  }
 
         public User(UserProperties userProperties)
         {
-            _userProperties = userProperties;
+            UserProperties = userProperties;
         }
 
-        public User(string user, int pasasword)
+        public User(string user, long password)
         {
-            _userProperties = new UserProperties(user, pasasword);
+            UserProperties = new UserProperties(user, password);
+        }
+
+        public long GetPassword()
+        {
+            return UserProperties.Password;
+        }
+        public string GetUserName()
+        {
+            return UserProperties.Username;
         }
     }
 }

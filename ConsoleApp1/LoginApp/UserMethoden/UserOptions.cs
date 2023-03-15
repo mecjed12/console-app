@@ -47,19 +47,11 @@ namespace ConsoleApp1.LoginApp.UserMethoden
                             break;
                     }
                 }
-                catch (ArgumentException ex)
-                {
-
-                }
                 catch (FormatException ex)
                 {
                     var message = "Geben Sie bitte eine nummer ein";
                     consoleHelper.Printer(message);
-                }
-                catch (Exception ex)
-                {
-
-                }
+                }              
             }
         }
     }

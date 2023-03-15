@@ -10,7 +10,6 @@ namespace ConsoleApp1.LoginApp.UserMethoden
         private IUserService userService;
         private IUserOptions userOptions; 
 
-
         public UserInterface(IConsoleHelper consoleHelper, IUserService userService, IUserOptions userOptions)
         {
             this.consoleHelper = consoleHelper;
@@ -20,13 +19,13 @@ namespace ConsoleApp1.LoginApp.UserMethoden
         }
 
         public List<User> StoredUsers { get; set; } = new List<User>();
+
         public void Main()
         {
             InitializeStart();
         }
 
-
-        public void InitializeStart()
+        protected void InitializeStart()
         {
             consoleHelper.Printer("Willkommen bei Der loginApp");
             Thread.Sleep(400);
@@ -59,32 +58,39 @@ namespace ConsoleApp1.LoginApp.UserMethoden
                                 consoleHelper.PrintAllUsers(StoredUsers);
                                 break;
                         }
-                        consoleHelper.Printer("Wollen sie fortfahren Y = weiter und N = für Nein");
-                        ConsoleKeyInfo checkKey = consoleHelper.ReadKey();
-                        if (checkKey.Key == ConsoleKey.Y)
-                        {
-                            examination = true;
-                        }
-                        else if (checkKey.Key == ConsoleKey.N)
-                        {
-                            consoleHelper.Printer("");
-                            consoleHelper.Printer("Auf Wiedersehen");
-                            examination = false;
-                            Environment.Exit(0);
-                        }
-                        else if (checkKey.Key != ConsoleKey.Y && checkKey.Key != ConsoleKey.N)
-                        {
-                            consoleHelper.Printer("");
-                            consoleHelper.Printer("bitte Geben Sie die richtige Taste ein ");
-                        }
+                        examination = CheckYesNoInput(examination);
                     }
                 }
-                else if (checkEnterKey.Key != ConsoleKey.Enter)
+                else
                 {
                     consoleHelper.Printer("");
                     consoleHelper.Printer("Sie haben eine falsche eingabe betätigt\n");
                 }
             }
+        }
+
+        private bool CheckYesNoInput(bool examination)
+        {
+            consoleHelper.Printer("Wollen sie fortfahren Y = weiter und N = für Nein");
+            ConsoleKeyInfo checkKey = consoleHelper.ReadKey();
+            if (checkKey.Key == ConsoleKey.Y)
+            {
+                examination = true;
+            }
+            else if (checkKey.Key == ConsoleKey.N)
+            {
+                consoleHelper.Printer("");
+                consoleHelper.Printer("Auf Wiedersehen");
+                examination = false;
+                Environment.Exit(0);
+            }
+            else
+            {
+                consoleHelper.Printer("");
+                consoleHelper.Printer("bitte Geben Sie die richtige Taste ein ");
+            }
+
+            return examination;
         }
     }
 }

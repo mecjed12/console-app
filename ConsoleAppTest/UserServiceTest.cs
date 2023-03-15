@@ -25,8 +25,8 @@ namespace ConsoleAppTest
 
             //assert
             Assert.AreEqual(1, userList.Count);
-            Assert.AreEqual("bla", userList[0].UserProperties.Username);
-            Assert.AreEqual(124, userList[0].UserProperties.Password);
+            Assert.AreEqual("bla", userList[0].GetUserName());
+            Assert.AreEqual(124, userList[0].GetPassword());
 
             consoleHelperMock.Verify(o => o.Printer(It.Is<string>(str => str == "Sie haben sich erfolgreich registriert")));
 
@@ -90,7 +90,7 @@ namespace ConsoleAppTest
             var result = userService.FindUser(userList);
 
             //assert
-            Assert.AreEqual(result.UserProperties.Username, consoleHelperMock.Object.ReadInput());
+            Assert.AreEqual(result.GetUserName(), consoleHelperMock.Object.ReadInput());
         }
 
         [TestMethod]
