@@ -31,7 +31,7 @@ namespace ConsoleAppTest
            // userServiceMock.Verify(o => o.CreateUser(It.IsAny<List<User>>()), Times.Once);
         }
 
-        private class UserInterfaceAccessor : UserInterface
+        private class UserInterfaceAccessor : LtExecuter
         {
             public UserInterfaceAccessor(IConsoleHelper consoleHelper, IUserService userService, IUserOptions userOptions) 
                 : base(consoleHelper, userService, userOptions)

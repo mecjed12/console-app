@@ -1,32 +1,35 @@
 ﻿using ConsoleApp1.LoginApp.Registrie;
+using ConsoleApp1.LoginApp.Tools;
 using ConsoleApp1.LoginApp.UserMethoden.UserInformation;
 
 namespace ConsoleApp1.LoginApp.UserMethoden
 {
     public class UserService : IUserService
     {
-        private IRegistring registring;
-        private IConsoleHelper consoleHelper; 
+        private readonly IRegistring _registring;
+        private readonly IConsoleHelper _consoleHelper;
+        private readonly IWeatherClient _weatherClient;
 
-        public UserService(IRegistring registring, IConsoleHelper consoleHelper )
+        public UserService(IRegistring registring, IConsoleHelper consoleHelper, IWeatherClient weatherClient )
         {
-            this.registring = registring;
-            this.consoleHelper = consoleHelper;
+            this._registring = registring;
+            this._consoleHelper = consoleHelper;
+            this._weatherClient = weatherClient;
         }
 
-        public void CreateUser(List<User> userList)
+        public void CreateUser(List<User> usersList)
         {
-            var userName = registring.RegistryName();
-            var password = registring.RegistryPassword();
-            consoleHelper.Printer("Sie haben sich erfolgreich registriert");
+            var userName = _registring.RegistryName();
+            var password = _registring.RegistryPassword();
+            _consoleHelper.Printer("Sie haben sich erfolgreich registriert");
             var newUser = new User(userName, password);
-            userList.Add(newUser);
+            usersList.Add(newUser);
         }
 
-        public bool LoginUser(List<User> userList)
+        public bool LoginUser(List<User> usersList)
         {
-            consoleHelper.Printer("Bitte geben Sie ihren Username ein");
-            var user = FindUser(userList);
+            _consoleHelper.Printer("Bitte geben Sie ihren Username ein");
+            var user = FindUser(usersList);
             if (user == null )
             {
                 return false;
@@ -35,47 +38,57 @@ namespace ConsoleApp1.LoginApp.UserMethoden
             return PasswordCheckOver(user);
         }
 
-        public  User FindUser(List<User> userList)
+        public User FindUser(List<User> usersList)
         {
-            Thread.Sleep(1200);
-            string requestedUserName = consoleHelper.ReadInput();
-            foreach (var users in userList)
+            string requestedUserName = _consoleHelper.ReadInput();
+            User? user = usersList.FirstOrDefault(o => o.GetUserName() == requestedUserName);
+            if (user == null)
             {
-                if (users.GetUserName() == requestedUserName)
-                {
-                    return users;
-                }
+                _consoleHelper.Printer("Dieser User exestiert nicht");
             }
-            consoleHelper.Printer("Dieser User exestiert nicht");
-            return null;
+            return user;
         }
 
 
         public bool PasswordCheckOver(User user)
         {
-            consoleHelper.Printer("Bitte geben sie Jetz ihr passwort ein\n Sie haben 3 versuche");
+            _consoleHelper.Printer("Bitte geben sie Jetz ihr passwort ein\n Sie haben 3 versuche");
             for (int i = 0; i < 3; i++)
             {
                 try
                 {
-                    var password = consoleHelper.IntConvertor_String(consoleHelper.ReadInput());
+                    var password = _consoleHelper.IntConvertor_String(_consoleHelper.ReadInput());
                     if (password == user.GetPassword())
                     {
                         break;
                     }
                     else
                     {
-                        consoleHelper.Printer($"Sie haben das Passwort falsch eingegben bitte geben sie es erneut ein ");
-                        consoleHelper.Printer($"Sie haben noch {3-i} versuche");
+                        _consoleHelper.Printer($"Sie haben das Passwort falsch eingegben bitte geben sie es erneut ein ");
+                        _consoleHelper.Printer($"Sie haben noch {3-i} versuche");
                     }
                 }
-                catch (FormatException ex)
+                catch 
                 {
-                    string exceptionMessage = "Bitte geben Sie nummer ein ";
-                    consoleHelper.Printer(exceptionMessage);
+                    throw new FormatException("Bitte geben Sie NUmmer ein");
                 }
             }
-            consoleHelper.Printer("Sie haben sich erflogreich Angemeldet");
+            _consoleHelper.Printer("Sie haben sich erflogreich Angemeldet");
+            return true;
+        }
+
+        public bool SwitchToServices()
+        {
+            _consoleHelper.Printer("Wollen Sie den Service benutzen Y/N");
+            ConsoleKeyInfo choiceServicesOrNot = _consoleHelper.ReadKey();
+            if(choiceServicesOrNot.Key == ConsoleKey.Y)
+            {
+                _weatherClient.RunAsync();
+            }
+            else if (choiceServicesOrNot.Key == ConsoleKey.N)
+            {
+                return false;
+            }
             return true;
         }
     }

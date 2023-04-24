@@ -5,31 +5,15 @@ namespace ConsoleApp1.LoginApp.UserMethoden
 {
     public class ConsoleHelper : IConsoleHelper
     {
-        public void Printer(string output)
-        {
-            Console.WriteLine(output);
-        }
+        public void Printer(string output) => Console.WriteLine(output);
 
-        public int IntConvertor_String (string number)
-        {          
-            return Convert.ToInt32(number);
-        }
+        public int IntConvertor_String (string number) => Convert.ToInt32(number);
 
-        public int IntConvertor_Int(int number)
-        {
-            return Convert.ToInt32(number);
-        }
+        public int IntConvertor_Int(int number) => Convert.ToInt32(number);
 
-
-        public ConsoleKeyInfo ReadKey()
-        {
-            return Console.ReadKey();
-        }
-
-        public string ReadInput()
-        {
-            return Console.ReadLine();
-        }
+        public ConsoleKeyInfo ReadKey() => Console.ReadKey();
+      
+        public string ReadInput() => Console.ReadLine();
 
         public void PrintTheUser (string name, int password)
         {

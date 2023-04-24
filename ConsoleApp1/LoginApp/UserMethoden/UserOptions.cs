@@ -4,7 +4,7 @@ namespace ConsoleApp1.LoginApp.UserMethoden
 {
     public class UserOptions : IUserOptions
     {
-        private IConsoleHelper consoleHelper;
+        private readonly IConsoleHelper consoleHelper;
         public UserOptions(IConsoleHelper consoleHelper)
         {
             this.consoleHelper = consoleHelper;
@@ -47,10 +47,9 @@ namespace ConsoleApp1.LoginApp.UserMethoden
                             break;
                     }
                 }
-                catch (FormatException ex)
+                catch 
                 {
-                    var message = "Geben Sie bitte eine nummer ein";
-                    consoleHelper.Printer(message);
+                    throw new FormatException("Geben Sie bitte eine Nummer ein");
                 }              
             }
         }

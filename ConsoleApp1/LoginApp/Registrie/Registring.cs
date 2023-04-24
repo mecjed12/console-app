@@ -3,7 +3,7 @@
     public class Registring : IRegistring
     {
 
-        private IConsoleHelper consoleHelper;
+        private readonly IConsoleHelper consoleHelper;
 
         public Registring(IConsoleHelper consoleHelper)
         {
@@ -42,7 +42,6 @@
 
         public int RegistryPassword()
         {
-            Thread.Sleep(1000);
             consoleHelper.Printer("Bitte geben Sie ihr gewünschtes Passwort ein ");
             var password = consoleHelper.ReadInput();
             int numberComparator;
