@@ -1,4 +1,6 @@
-﻿namespace ConsoleApp1.LoginApp.Registrie
+﻿using ConsoleApp1.Helper;
+
+namespace ConsoleApp1.LoginApp.Registrie
 {
     public class Registring : IRegistring
     {

@@ -1,7 +1,10 @@
-﻿using ConsoleApp1.LoginApp.Registrie;
+﻿using ConsoleApp1.Config;
+using ConsoleApp1.Helper;
+using ConsoleApp1.LoginApp.Registrie;
 using ConsoleApp1.LoginApp.Tools;
 using ConsoleApp1.LoginApp.UserMethoden.UserInformation;
-
+using System.Diagnostics.Contracts;
+using static ConsoleApp1.LoginApp.Registrie.EnumOptions;
 
 namespace ConsoleApp1.LoginApp.UserMethoden
 {
@@ -10,25 +13,24 @@ namespace ConsoleApp1.LoginApp.UserMethoden
         private readonly IConsoleHelper _consoleHelper;
         private readonly IUserService _userService;
         private readonly IUserOptions _userOptions;
-        private readonly IWeatherClient _weatherClient;
+        private readonly IAppSettings _appSettings;
+      
 
-        public LtExecuter(IConsoleHelper consoleHelper, IUserService userService, IUserOptions userOptions)
+        public LtExecuter(IConsoleHelper consoleHelper, IUserService userService, IUserOptions userOptions,IAppSettings appSettings)
         {
-            this._consoleHelper = consoleHelper;
-            this._userService = userService;
-            this._userOptions = userOptions;
+            _consoleHelper = consoleHelper;
+            _userService = userService;
+            _userOptions = userOptions;
+            _appSettings = appSettings;
         }
 
+      
 
-        public List<User> StoredUsers { get; set; } = new List<User>();
-
-        public void InitializeStart()
+        public void InitializeStart(string[] args)
         {
             _consoleHelper.Printer("Willkommen bei Der loginApp");
-            Thread.Sleep(400);
             while (true)
             {
-                Thread.Sleep(600);
                 _consoleHelper.Printer("Um fort zu fahren drücken Sie bitte Enter");
                 ConsoleKeyInfo checkEnterKey = _consoleHelper.ReadKey();
                 if (checkEnterKey.Key == ConsoleKey.Enter)
@@ -44,18 +46,15 @@ namespace ConsoleApp1.LoginApp.UserMethoden
                                 break;
 
                             case Options.NeuerUserRegestrieren:
-                                _userService.CreateUser(StoredUsers);
+                                RegistringCases();
                                 break;
 
                             case Options.Login:
-                                if(_userService.LoginUser(StoredUsers))
-                                {
-                                    _userService.SwitchToServices();
-                                }
+                                LoginCase();
                                 break;
 
                             case Options.OutputofAllUser:
-                                _consoleHelper.PrintAllUsers(StoredUsers);
+                                _consoleHelper.PrintAllUsers(_appSettings.UsersFolderPath);
                                 break;
                         }
                         examination = CheckYesNoInput(examination);
@@ -94,6 +93,32 @@ namespace ConsoleApp1.LoginApp.UserMethoden
             return examination;
         }
 
-       
+        public void RegistringCases()
+        {
+            var requestOptions = _userOptions.AccountsOptions();
+            switch(requestOptions)
+            {
+                case UsersOptions.Admin:
+                    _userService.CreateUser(_appSettings.AdminFolderPath);
+                    break;
+                case UsersOptions.User:
+                    _userService.CreateUser(_appSettings.UsersFolderPath);
+                    break;
+            }
+        }
+
+        public void LoginCase()
+        {
+            var requestOptions = _userOptions.AccountsOptions();
+            switch (requestOptions)
+            {
+                case UsersOptions.Admin:
+                    _userService.LoginUser(_appSettings.AdminFolderPath);
+                    break;
+                case UsersOptions.User:
+                    _userService.LoginUser(_appSettings.UsersFolderPath);
+                    break;
+            }
+        }
     }
 }

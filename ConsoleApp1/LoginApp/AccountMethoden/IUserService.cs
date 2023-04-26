@@ -4,9 +4,9 @@ namespace ConsoleApp1.LoginApp.UserMethoden
 {
     public interface IUserService
     {
-        void CreateUser(List<User> usersList);
-        bool LoginUser(List<User> usersList);
-        User FindUser(List<User> usersList);
+        void CreateUser(string path);
+        bool LoginUser(string folderPath);
+        User FindUser(string folderPath);
         bool SwitchToServices();
     }
 }

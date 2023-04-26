@@ -5,13 +5,13 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using ConsoleApp1.LoginApp.Registrie;
 using ConsoleApp1.LoginApp.UserMethoden;
 using OpenMeteo;
 using ScottPlot;
 
 namespace ConsoleApp1.LoginApp.Tools
 {
+    using ConsoleApp1.Helper;
     using ConsoleGraphics;
     public class WeatherClient : IWeatherClient
     {

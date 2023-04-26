@@ -1,6 +1,10 @@
-﻿using ConsoleApp1.LoginApp.Registrie;
+﻿using ConsoleApp1.Helper;
+using ConsoleApp1.LoginApp.Registrie;
 using ConsoleApp1.LoginApp.Tools;
 using ConsoleApp1.LoginApp.UserMethoden.UserInformation;
+using Newtonsoft.Json;
+using System.Text.Json.Nodes;
+using System.Linq;
 
 namespace ConsoleApp1.LoginApp.UserMethoden
 {
@@ -9,27 +13,34 @@ namespace ConsoleApp1.LoginApp.UserMethoden
         private readonly IRegistring _registring;
         private readonly IConsoleHelper _consoleHelper;
         private readonly IWeatherClient _weatherClient;
+        private readonly IFileHelper _fileHelper;
 
-        public UserService(IRegistring registring, IConsoleHelper consoleHelper, IWeatherClient weatherClient )
+        public UserService(IRegistring registring, IConsoleHelper consoleHelper, IWeatherClient weatherClient,IFileHelper fileHelper)
         {
-            this._registring = registring;
-            this._consoleHelper = consoleHelper;
-            this._weatherClient = weatherClient;
+            _registring = registring;
+            _consoleHelper = consoleHelper;
+            _weatherClient = weatherClient;
+            _fileHelper = fileHelper;
         }
 
-        public void CreateUser(List<User> usersList)
+        public void CreateUser(string path)
         {
             var userName = _registring.RegistryName();
             var password = _registring.RegistryPassword();
             _consoleHelper.Printer("Sie haben sich erfolgreich registriert");
-            var newUser = new User(userName, password);
-            usersList.Add(newUser);
+            var newUser = new User 
+            {
+                Name = userName,
+                Password = password,
+                CreateAt = DateTime.Now,
+            };
+            _fileHelper.WriteUserEntry(newUser,path);
         }
 
-        public bool LoginUser(List<User> usersList)
+        public bool LoginUser(string folderPath)
         {
             _consoleHelper.Printer("Bitte geben Sie ihren Username ein");
-            var user = FindUser(usersList);
+            var user = FindUser(folderPath);
             if (user == null )
             {
                 return false;
@@ -38,15 +49,19 @@ namespace ConsoleApp1.LoginApp.UserMethoden
             return PasswordCheckOver(user);
         }
 
-        public User FindUser(List<User> usersList)
+        public User FindUser(string folderPath)
         {
             string requestedUserName = _consoleHelper.ReadInput();
-            User? user = usersList.FirstOrDefault(o => o.GetUserName() == requestedUserName);
-            if (user == null)
+            string[] userFiles = Directory.GetFiles(folderPath, "*.json");
+            User foundUser = userFiles
+                .Select(userFile => JsonConvert.DeserializeObject<User>(File.ReadAllText(userFile)))
+                .FirstOrDefault(user => user.Name == requestedUserName);
+
+            if (foundUser == null)
             {
                 _consoleHelper.Printer("Dieser User exestiert nicht");
             }
-            return user;
+            return foundUser;
         }
 
 
@@ -58,17 +73,17 @@ namespace ConsoleApp1.LoginApp.UserMethoden
                 try
                 {
                     var password = _consoleHelper.IntConvertor_String(_consoleHelper.ReadInput());
-                    if (password == user.GetPassword())
+                    if (password == user.Password)
                     {
                         break;
                     }
                     else
                     {
                         _consoleHelper.Printer($"Sie haben das Passwort falsch eingegben bitte geben sie es erneut ein ");
-                        _consoleHelper.Printer($"Sie haben noch {3-i} versuche");
+                        _consoleHelper.Printer($"Sie haben noch {3 - i} versuche");
                     }
                 }
-                catch 
+                catch
                 {
                     throw new FormatException("Bitte geben Sie NUmmer ein");
                 }
@@ -83,7 +98,17 @@ namespace ConsoleApp1.LoginApp.UserMethoden
             ConsoleKeyInfo choiceServicesOrNot = _consoleHelper.ReadKey();
             if(choiceServicesOrNot.Key == ConsoleKey.Y)
             {
-                _weatherClient.RunAsync();
+                _consoleHelper.Printer("Wollen Sie das Wetter ausgeben oder den Agenten aktivieren: Wetter/W , Agent/A");
+                ConsoleKeyInfo choiceAgentOrWeather = _consoleHelper.ReadKey();
+                if (choiceAgentOrWeather.Key == ConsoleKey.W)
+                {
+                    _weatherClient.RunAsync();
+                }
+                else if(choiceAgentOrWeather.Key == ConsoleKey.A)
+                {
+                    _autoGpt.PythonCommand();
+                }
+            
             }
             else if (choiceServicesOrNot.Key == ConsoleKey.N)
             {
