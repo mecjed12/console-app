@@ -25,10 +25,10 @@ namespace ConsoleApp1.LoginApp.AccountMethoden
             _loginDataContext = loginDataContext;
         }
 
-        public void DeleteUserOrAdminFunction(Func<string> folderPath)
+        public void DeleteUserOrAdminFunction(Func<string> chooseFolderPath)
         {
             var index = 0;
-            string[] userFiles = Directory.GetFiles(folderPath(), "*.json");
+            string[] userFiles = Directory.GetFiles(chooseFolderPath(), "*.json");
             var users = userFiles.Select(userFile => JsonConvert.DeserializeObject<Users>(File.ReadAllText(userFile))).ToList();
             users.ForEach(user => _consoleHelper.Printer($"{index ++}. Username: {user.Name}, Passwort: {user.Password}"));
 

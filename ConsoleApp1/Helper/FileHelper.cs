@@ -1,5 +1,6 @@
 ﻿using ConsoleApp1.Config;
 using ConsoleApp1.LoginApp.AccountMethoden.UserInformation;
+using LoginAppData;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -34,7 +35,7 @@ namespace ConsoleApp1.Helper
             sw.WriteLine(filename);
         }
 
-        public void WriteUserEntry(Users users,string path)
+        public void WriteUserEntry(Account users,string path)
         {
             ArgumentNullException.ThrowIfNull(users);
             var timeTamp = DateTime.UtcNow.ToString("yyyy-MM-dd_HH-mm-ss");

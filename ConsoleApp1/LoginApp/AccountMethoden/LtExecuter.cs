@@ -16,7 +16,7 @@ namespace ConsoleApp1.LoginApp.UserMethoden
         private readonly IAdminCommands _adminCommands;
       
 
-        public LtExecuter(IConsoleHelper consoleHelper, IUserService userService, IUserOptions userOptions,IAppSettings appSettings, IAdminCommands adminCommands)
+        public LtExecuter(IConsoleHelper consoleHelper, IUserService userService, IUserOptions userOptions, IAppSettings appSettings, IAdminCommands adminCommands)
         {
             _consoleHelper = consoleHelper;
             _userService = userService;
@@ -137,10 +137,17 @@ namespace ConsoleApp1.LoginApp.UserMethoden
             while (examination)
             {
                 var requeustoptions = _userOptions.AdminCommands();
+                _consoleHelper.Printer($"acess to D/Database or J/Jsonfiles");
+                var storagePath = _consoleHelper.ReadKey();
                 switch (requeustoptions)
                 {
                     case Adminrights.DeleteUsersOrAdmin:
-                        await _adminCommands.DeleteUserOrAdminInDataBase();
+                        _consoleHelper.Printer("Folder: A/Admin or U/User");
+                        var folderPath = _consoleHelper.ReadKey();
+                        await StoragePath(
+                            () => _adminCommands.DeleteUserOrAdminInDataBase(),
+                            () =>  _adminCommands.DeleteUserOrAdminFunction(() => _userService.ChooseFolderPath(folderPath.Key == ConsoleKey.A)),
+                            storagePath);
                         break;
                     case Adminrights.DeleteAllUsers:
                         await _adminCommands.DeleteAllUsersFromDataBase();
@@ -160,5 +167,23 @@ namespace ConsoleApp1.LoginApp.UserMethoden
                 }
             }
         }
+
+        public static async Task StoragePath(
+            Func<Task> databaseMethod,
+            Action jsonFileMethod,
+            ConsoleKeyInfo storagePath)
+        {
+            if (storagePath.Key == ConsoleKey.D)
+            {
+                await databaseMethod();
+            }
+            else if(storagePath.Key == ConsoleKey.J)
+            {
+               
+                jsonFileMethod();
+            }
+        }
     }
 }
+
+

@@ -35,7 +35,7 @@ namespace ConsoleApp1.LoginApp.UserMethoden
             {
                 var userName = _registring.RegistryName();
                 var password = _registring.RegistryPassword();
-                _consoleHelper.Printer("Sie haben sich erfolgreich registriert");
+                _consoleHelper.Printer("You have registring successfully");
                 var adminCondition = (usersOptions == UsersOptions.Admin);
                 var newAccount = new Account
                 {
@@ -43,12 +43,21 @@ namespace ConsoleApp1.LoginApp.UserMethoden
                     Password = password,
                     CreatedAt = DateTime.UtcNow.AddHours(1),
                     AccountType = adminCondition,
-                }; 
-                await SaveAccountToDatabaseAsync(newAccount);
+                };
+                _consoleHelper.Printer("Save in D/(Database) or as J/(JsonFile)");
+                var storageSpace = _consoleHelper.ReadKey();
+                if(storageSpace.Key == ConsoleKey.D)
+                {
+                    await SaveAccountToDatabaseAsync(newAccount);
+                }
+                else if(storageSpace.Key == ConsoleKey.J)
+                {
+                    _fileHelper.WriteUserEntry(newAccount, ChooseFolderPath(adminCondition));
+                }
             }
             catch(DbUpdateException ex)
             {
-                _consoleHelper.Printer("Fehler beim speichern Des Users auf der Datenbank");
+                _consoleHelper.Printer("Error saving the user to the database");
                 _consoleHelper.Printer(ex.InnerException?.Message ??ex.Message);
             }
         }
@@ -137,14 +146,9 @@ namespace ConsoleApp1.LoginApp.UserMethoden
             return true;
         }
 
-        public string ChooseFolderPath()
+        public string ChooseFolderPath(bool options)
         {
-            _consoleHelper.Printer("Admin oder User wählen");
-            var folderPath = _consoleHelper.ReadInput();
-
-            return folderPath == "Admin" ? _settings.AdminFolderPath :
-                   folderPath == "User" ? _settings.UsersFolderPath : 
-                   null;
+            return options ? _settings.AdminFolderPath : _settings.UsersFolderPath;
         }
     }
 }

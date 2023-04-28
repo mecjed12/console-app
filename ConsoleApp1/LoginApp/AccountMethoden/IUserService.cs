@@ -9,7 +9,7 @@ namespace ConsoleApp1.LoginApp.UserMethoden
         Task<bool> LoginUser();
         Task<Account?> FindUser();
         bool SwitchToServices();
-        string ChooseFolderPath();
+        string ChooseFolderPath(bool options);
         Task SaveAccountToDatabaseAsync(Account newAccount);
     }
 }
