@@ -1,12 +1,15 @@
-﻿using ConsoleApp1.LoginApp.UserMethoden.UserInformation;
+﻿using SharedLibary;
+using LoginAppData; 
 
 namespace ConsoleApp1.LoginApp.UserMethoden
 {
     public interface IUserService
     {
-        void CreateUser(string path);
-        bool LoginUser(string folderPath);
-        User FindUser(string folderPath);
+        Task CreateUser(UsersOptions usersOptions);
+        Task<bool> LoginUser();
+        Task<Account?> FindUser();
         bool SwitchToServices();
+        string ChooseFolderPath();
+        Task SaveAccountToDatabaseAsync(Account newAccount);
     }
 }

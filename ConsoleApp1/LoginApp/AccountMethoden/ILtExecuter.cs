@@ -5,5 +5,6 @@ namespace ConsoleApp1.LoginApp.UserMethoden
     {
         bool CheckYesNoInput(bool examination);
         void InitializeStart(string[] args);
+        Task LoginCase();
     }
 }

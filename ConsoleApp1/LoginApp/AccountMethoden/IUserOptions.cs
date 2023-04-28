@@ -1,4 +1,5 @@
 ﻿using ConsoleApp1.LoginApp.Registrie;
+using SharedLibary;
 using static ConsoleApp1.LoginApp.Registrie.EnumOptions;
 
 namespace ConsoleApp1.LoginApp.UserMethoden
@@ -7,5 +8,6 @@ namespace ConsoleApp1.LoginApp.UserMethoden
     {
         Options OptionSelector();
         UsersOptions AccountsOptions();
+        Adminrights AdminCommands();
     }
 }

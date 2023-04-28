@@ -11,6 +11,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{D3AED026-847
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{8A338815-2438-4F0E-9B01-BA6F5FB9C2FF}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoginAppData", "LoginAppData\LoginAppData.csproj", "{917486F1-07E7-4E32-959E-E0F4E4B0C877}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedLibary", "SharedLibary\SharedLibary.csproj", "{374854C1-FB86-426F-B0CB-A2B50C8405B4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +29,14 @@ Global
 		{23E1376E-D416-4C36-8BC0-F5F79A5292AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{23E1376E-D416-4C36-8BC0-F5F79A5292AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{23E1376E-D416-4C36-8BC0-F5F79A5292AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{917486F1-07E7-4E32-959E-E0F4E4B0C877}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{917486F1-07E7-4E32-959E-E0F4E4B0C877}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{917486F1-07E7-4E32-959E-E0F4E4B0C877}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{917486F1-07E7-4E32-959E-E0F4E4B0C877}.Release|Any CPU.Build.0 = Release|Any CPU
+		{374854C1-FB86-426F-B0CB-A2B50C8405B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{374854C1-FB86-426F-B0CB-A2B50C8405B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{374854C1-FB86-426F-B0CB-A2B50C8405B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{374854C1-FB86-426F-B0CB-A2B50C8405B4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

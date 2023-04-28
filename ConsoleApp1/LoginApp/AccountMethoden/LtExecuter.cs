@@ -1,9 +1,8 @@
 ﻿using ConsoleApp1.Config;
 using ConsoleApp1.Helper;
-using ConsoleApp1.LoginApp.Registrie;
-using ConsoleApp1.LoginApp.Tools;
-using ConsoleApp1.LoginApp.UserMethoden.UserInformation;
-using System.Diagnostics.Contracts;
+using ConsoleApp1.LoginApp.AccountMethoden;
+using ScottPlot.Control;
+using SharedLibary;
 using static ConsoleApp1.LoginApp.Registrie.EnumOptions;
 
 namespace ConsoleApp1.LoginApp.UserMethoden
@@ -14,19 +13,20 @@ namespace ConsoleApp1.LoginApp.UserMethoden
         private readonly IUserService _userService;
         private readonly IUserOptions _userOptions;
         private readonly IAppSettings _appSettings;
+        private readonly IAdminCommands _adminCommands;
       
 
-        public LtExecuter(IConsoleHelper consoleHelper, IUserService userService, IUserOptions userOptions,IAppSettings appSettings)
+        public LtExecuter(IConsoleHelper consoleHelper, IUserService userService, IUserOptions userOptions,IAppSettings appSettings, IAdminCommands adminCommands)
         {
             _consoleHelper = consoleHelper;
             _userService = userService;
             _userOptions = userOptions;
             _appSettings = appSettings;
+            _adminCommands = adminCommands;
         }
 
-      
 
-        public void InitializeStart(string[] args)
+        public async void InitializeStart(string[] args)
         {
             _consoleHelper.Printer("Willkommen bei Der loginApp");
             while (true)
@@ -50,15 +50,10 @@ namespace ConsoleApp1.LoginApp.UserMethoden
                                 break;
 
                             case Options.Login:
-                                LoginCase();
-                                break;
-
-                            case Options.OutputofAllUser:
-                                _consoleHelper.PrintAllUsers(_appSettings.UsersFolderPath);
+                                Task.Run(async() => await LoginCase()).Wait();
                                 break;
                         }
-                        examination = CheckYesNoInput(examination);
-                        
+                        examination = CheckYesNoInput(examination); 
                     }
                 }
                 else
@@ -99,25 +94,70 @@ namespace ConsoleApp1.LoginApp.UserMethoden
             switch(requestOptions)
             {
                 case UsersOptions.Admin:
-                    _userService.CreateUser(_appSettings.AdminFolderPath);
+                    _userService.CreateUser(UsersOptions.Admin);
                     break;
                 case UsersOptions.User:
-                    _userService.CreateUser(_appSettings.UsersFolderPath);
+                    _userService.CreateUser(UsersOptions.User);
+                    break;
+                default:
+                    _consoleHelper.Printer("Wrong Input");
                     break;
             }
         }
 
-        public void LoginCase()
+        public async Task LoginCase()
         {
             var requestOptions = _userOptions.AccountsOptions();
+            bool loggedIn;
             switch (requestOptions)
             {
                 case UsersOptions.Admin:
-                    _userService.LoginUser(_appSettings.AdminFolderPath);
+                    loggedIn = await _userService.LoginUser();
+                    if (loggedIn)
+                    {
+                        await AdminCase();
+                    }
+                    else
+                    {
+                        _consoleHelper.Printer("Login is Failed");
+                    }
                     break;
                 case UsersOptions.User:
-                    _userService.LoginUser(_appSettings.UsersFolderPath);
+                    await _userService.LoginUser();
                     break;
+                default:
+                    _consoleHelper.Printer("Wrong Input");
+                    break;
+            }
+        }
+
+        public async Task AdminCase()
+        {
+            var examination = true;
+            while (examination)
+            {
+                var requeustoptions = _userOptions.AdminCommands();
+                switch (requeustoptions)
+                {
+                    case Adminrights.DeleteUsersOrAdmin:
+                        await _adminCommands.DeleteUserOrAdminInDataBase();
+                        break;
+                    case Adminrights.DeleteAllUsers:
+                        await _adminCommands.DeleteAllUsersFromDataBase();
+                        break;
+                    case Adminrights.OutputOfAllUsers:
+                        await _consoleHelper.PrintAllUsersFromDataBase("User");
+                        break;
+                    case Adminrights.ChangeLoginData:
+                        await _adminCommands.ChangeLginDataInDatabase();
+                        break;
+                    case Adminrights.AdminRightsExit:
+                        examination = false;
+                        break;
+                    default:
+                        _consoleHelper.Printer("Wrong Input");
+                        break;
+                }
             }
         }
     }

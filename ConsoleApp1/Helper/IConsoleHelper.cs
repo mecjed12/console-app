@@ -1,5 +1,4 @@
-﻿using ConsoleApp1.LoginApp.UserMethoden.UserInformation;
-
+﻿
 namespace ConsoleApp1.Helper
 {
     public interface IConsoleHelper
@@ -7,11 +6,12 @@ namespace ConsoleApp1.Helper
         void Printer(string message);
         int IntConvertor_String(string number);
         int IntConvertor_Int(int number);
+        long LongConverterInt(int number);
+        long LongConverterString(string number);
         string ReadInput();
-        void PrintTheUser(string name, int password);
-        void PrintAllUsers(string folderPath);
-        void EnumListPrint(List<User> options);
+        void PrintAllUsersFromJsonFIles(Func<string> folderPath);
+        Task PrintAllUsersFromDataBase(string accountype);
         ConsoleKeyInfo ReadKey();
-
+        void AllOptionsPrinter<TEnum>() where TEnum : Enum;
     }
 }

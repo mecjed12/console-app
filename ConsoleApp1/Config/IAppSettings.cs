@@ -10,6 +10,5 @@ namespace ConsoleApp1.Config
     {
         string UsersFolderPath { get; set; }
         string AdminFolderPath { get; set; }
-
     }
 }

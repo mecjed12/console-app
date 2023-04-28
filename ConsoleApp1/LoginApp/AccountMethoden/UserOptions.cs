@@ -1,5 +1,7 @@
 ﻿using ConsoleApp1.Helper;
 using ConsoleApp1.LoginApp.Registrie;
+using SharedLibary;
+using System.Security.Cryptography.X509Certificates;
 using static ConsoleApp1.LoginApp.Registrie.EnumOptions;
 
 namespace ConsoleApp1.LoginApp.UserMethoden
@@ -7,16 +9,14 @@ namespace ConsoleApp1.LoginApp.UserMethoden
     public class UserOptions : IUserOptions
     {
         private readonly IConsoleHelper _consoleHelper;
-        private readonly IEnumOptions _enumOptions;
-        public UserOptions(IConsoleHelper consoleHelper, IEnumOptions enumOptions)
+        public UserOptions(IConsoleHelper consoleHelper)
         {
             _consoleHelper = consoleHelper;
-            _enumOptions = enumOptions;
         }
 
         public Options OptionSelector()
         {
-            _enumOptions.AllOptionsPrinter<Options>();
+            _consoleHelper.AllOptionsPrinter<Options>();
             while (true)
             {
                 try
@@ -52,7 +52,7 @@ namespace ConsoleApp1.LoginApp.UserMethoden
 
         public UsersOptions AccountsOptions()
         {
-            _enumOptions.AllOptionsPrinter<UsersOptions>();
+            _consoleHelper.AllOptionsPrinter<UsersOptions>();
             while (true)
             {
                 try
@@ -78,8 +78,45 @@ namespace ConsoleApp1.LoginApp.UserMethoden
                     throw new FormatException("Geben Sie bitte eine Nummer ein");
                 }
             }
+        }
 
+        public Adminrights AdminCommands()
+        {
+            _consoleHelper.AllOptionsPrinter<Adminrights>();
+            while (true)
+            {
+                try
+                {
+                    _consoleHelper.Printer("");
+                    _consoleHelper.Printer("Geben Sie Ihre Nummer ein");
+                    var userInput = _consoleHelper.IntConvertor_String(_consoleHelper.ReadInput());
+                    switch (userInput)
+                    {
+                        case 0:
+                            return Adminrights.DeleteUsersOrAdmin;
 
+                        case 1:
+                            return Adminrights.DeleteAllUsers;
+
+                        case 2:
+                            return Adminrights.OutputOfAllUsers;
+
+                        case 3:
+                            return Adminrights.ChangeLoginData;
+
+                        case 4:
+                            return Adminrights.AdminRightsExit;
+
+                        default:
+                            _consoleHelper.Printer("Ungültige Eingabe, Bitte wählen Sie eine der verfügbare Options");
+                            break;
+                    }
+                }
+                catch
+                {
+                    throw new FormatException("Geben Sie bitte eine Nummer ein");
+                }
+            }
         }
     }
 }
