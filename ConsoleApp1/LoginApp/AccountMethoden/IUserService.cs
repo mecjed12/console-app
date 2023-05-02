@@ -8,7 +8,7 @@ namespace ConsoleApp1.LoginApp.UserMethoden
         Task CreateUser(UsersOptions usersOptions);
         Task<bool> LoginUser();
         Task<Account?> FindUser();
-        bool SwitchToServices();
+        Task<bool> SwitchToServices();
         string ChooseFolderPath(bool options);
         Task SaveAccountToDatabaseAsync(Account newAccount);
     }

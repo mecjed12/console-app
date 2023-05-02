@@ -4,7 +4,8 @@
     using ConsoleApp1.Helper;
     using ConsoleApp1.LoginApp.AccountMethoden;
     using ConsoleApp1.LoginApp.Registrie;
-    using ConsoleApp1.LoginApp.Tools;
+    using ConsoleApp1.LoginApp.Services.To_doListService;
+    using ConsoleApp1.LoginApp.Services.Weatherservices;
     using ConsoleApp1.LoginApp.UserMethoden;
     using LoginAppData;
     using Microsoft.EntityFrameworkCore;
@@ -47,6 +48,7 @@
             services.AddScoped<IFileHelper, FileHelper>();
             services.AddScoped<IAdminCommands, AdminCommands>();
             services.AddScoped<ILoginDataContext, LoginDataContext>();
+            services.AddScoped<IToDoList, ToDoList>();
         }
     }
 }

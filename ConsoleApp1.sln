@@ -13,7 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{8A338815
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoginAppData", "LoginAppData\LoginAppData.csproj", "{917486F1-07E7-4E32-959E-E0F4E4B0C877}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedLibary", "SharedLibary\SharedLibary.csproj", "{374854C1-FB86-426F-B0CB-A2B50C8405B4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedLibary", "SharedLibary\SharedLibary.csproj", "{374854C1-FB86-426F-B0CB-A2B50C8405B4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

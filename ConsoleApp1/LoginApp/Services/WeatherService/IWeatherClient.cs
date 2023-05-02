@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ConsoleApp1.LoginApp.Tools
+namespace ConsoleApp1.LoginApp.Services.Weatherservices
 {
     public interface IWeatherClient
     {

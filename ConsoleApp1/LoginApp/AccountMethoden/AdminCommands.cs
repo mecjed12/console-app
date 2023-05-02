@@ -29,6 +29,11 @@ namespace ConsoleApp1.LoginApp.AccountMethoden
         {
             var index = 0;
             string[] userFiles = Directory.GetFiles(chooseFolderPath(), "*.json");
+            if(userFiles.Length == 0)
+            {
+                _consoleHelper.Printer("There is no User");
+                return;
+            }
             var users = userFiles.Select(userFile => JsonConvert.DeserializeObject<Users>(File.ReadAllText(userFile))).ToList();
             users.ForEach(user => _consoleHelper.Printer($"{index ++}. Username: {user.Name}, Passwort: {user.Password}"));
 
@@ -42,13 +47,13 @@ namespace ConsoleApp1.LoginApp.AccountMethoden
             }
             else
             {
-                _consoleHelper.Printer("ungültige Auswahl");
+                _consoleHelper.Printer("Invalid selection");
             }
         }
 
-        public void DeleteAllUserFunction(Func<string> folderPath)
+        public void DeleteAllUserFunction(Func<string> chooseFolderPath)
         {
-            string[] userFiles = Directory.GetFiles(folderPath(), "*.json");
+            string[] userFiles = Directory.GetFiles(chooseFolderPath(), "*.json");
             var users = userFiles.Select(userFile => JsonConvert.DeserializeObject<Users>(File.ReadAllText(userFile))).ToList() ;
             users.ForEach(user => _consoleHelper.Printer($"Username: {user.Name}, Passwort: {user.Password}"));
 
@@ -56,10 +61,10 @@ namespace ConsoleApp1.LoginApp.AccountMethoden
             _consoleHelper.Printer("Alle Users sind gelöscht");
         }
 
-        public void ChangeLogData(Func<string> folderPath)
+        public void ChangeLogData(Func<string> chooseFolderPath)
         {
             var index = 0;
-            string[] userFiles = Directory.GetFiles(folderPath(), "*.json");
+            string[] userFiles = Directory.GetFiles(chooseFolderPath(), "*.json");
             var users = userFiles.Select(userFile => JsonConvert.DeserializeObject<Users>(File.ReadAllText(userFile))).ToList();
             users.ForEach(user => _consoleHelper.Printer($"{index ++}, Username: {user.Name}, Passwort: {user.Password}"));
 
@@ -95,12 +100,12 @@ namespace ConsoleApp1.LoginApp.AccountMethoden
         public async Task DeleteUserOrAdminInDataBase()
         {
             await _consoleHelper.PrintAllUsersFromDataBase("Admin");
-            _consoleHelper.Printer("Here all users and Admin\n Choose the id wich to delete");
+            _consoleHelper.Printer("Here are all users and Admin\n Choose the id wich to delete");
             var id = _consoleHelper.IntConvertor_String(_consoleHelper.ReadInput());
             var user = await _loginDataContext.Accounts.SingleOrDefaultAsync(o => o.Id == id);
             if(user == null) 
             {
-                _consoleHelper.Printer($"This Userid: {id} is not found");
+                _consoleHelper.Printer($"This Userid: {id} is not exsist");
             }
             else
             {

@@ -1,12 +1,13 @@
 ﻿using ConsoleApp1.Helper;
 using ConsoleApp1.LoginApp.Registrie;
-using ConsoleApp1.LoginApp.Tools;
 using Newtonsoft.Json;
 using ConsoleApp1.Config;
 using LoginAppData;
 using Microsoft.EntityFrameworkCore;
 using static ConsoleApp1.LoginApp.Registrie.EnumOptions;
 using SharedLibary;
+using ConsoleApp1.LoginApp.Services.Weatherservices;
+using ConsoleApp1.LoginApp.Services.To_doListService;
 
 namespace ConsoleApp1.LoginApp.UserMethoden
 {
@@ -18,8 +19,9 @@ namespace ConsoleApp1.LoginApp.UserMethoden
         private readonly IWeatherClient _weatherClient;
         private readonly IFileHelper _fileHelper;
         public readonly IAppSettings _settings;
+        private readonly IToDoList _toDoList;
 
-        public UserService(IRegistring registring, IConsoleHelper consoleHelper, IWeatherClient weatherClient,IFileHelper fileHelper,IAppSettings settings,ILoginDataContext loginDataContext)
+        public UserService(IRegistring registring, IConsoleHelper consoleHelper, IWeatherClient weatherClient,IFileHelper fileHelper,IAppSettings settings,ILoginDataContext loginDataContext,IToDoList toDoList)
         {
             _registring = registring;
             _consoleHelper = consoleHelper;
@@ -27,6 +29,7 @@ namespace ConsoleApp1.LoginApp.UserMethoden
             _fileHelper = fileHelper;
             _settings = settings;
             _loginDataContext = loginDataContext;
+            _toDoList = toDoList;
         }
 
         public async Task CreateUser(UsersOptions usersOptions)
@@ -122,30 +125,32 @@ namespace ConsoleApp1.LoginApp.UserMethoden
             return Task.FromResult(false);
         }
 
-        public bool SwitchToServices()
+        public async Task<bool> SwitchToServices()
         {
-            _consoleHelper.Printer("Wollen Sie den Service benutzen Y/N");
-            ConsoleKeyInfo choiceServicesOrNot = _consoleHelper.ReadKey();
-            if(choiceServicesOrNot.Key == ConsoleKey.Y)
+            while(true)
             {
-                _consoleHelper.Printer("Wollen Sie das Wetter ausgeben oder den Agenten aktivieren: Wetter/W , Agent/A");
-                ConsoleKeyInfo choiceAgentOrWeather = _consoleHelper.ReadKey();
-                if (choiceAgentOrWeather.Key == ConsoleKey.W)
+                _consoleHelper.Printer("Wollen Sie den Service benutzen Y/N");
+                ConsoleKeyInfo choiceServicesOrNot = _consoleHelper.ReadKey();
+                if (choiceServicesOrNot.Key == ConsoleKey.Y)
                 {
-                    _weatherClient.RunAsync();
+                    _consoleHelper.Printer("See the Weather or make a Todolist: Weather/W , Todolist/T");
+                    ConsoleKeyInfo choiceAgentOrWeather = _consoleHelper.ReadKey();
+                    if (choiceAgentOrWeather.Key == ConsoleKey.W)
+                    {
+                      await _weatherClient.RunAsync();
+                    }
+                    else if (choiceAgentOrWeather.Key == ConsoleKey.T)
+                    {
+                      await _toDoList.ToDoListCase();
+                    }
                 }
-                else if(choiceAgentOrWeather.Key == ConsoleKey.A)
+                else if (choiceServicesOrNot.Key == ConsoleKey.N)
                 {
+                    return false;
                 }
-            
             }
-            else if (choiceServicesOrNot.Key == ConsoleKey.N)
-            {
-                return false;
-            }
-            return true;
         }
-
+           
         public string ChooseFolderPath(bool options)
         {
             return options ? _settings.AdminFolderPath : _settings.UsersFolderPath;

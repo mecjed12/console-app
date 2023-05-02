@@ -12,19 +12,16 @@ namespace ConsoleApp1.LoginApp.UserMethoden
         private readonly IConsoleHelper _consoleHelper;
         private readonly IUserService _userService;
         private readonly IUserOptions _userOptions;
-        private readonly IAppSettings _appSettings;
         private readonly IAdminCommands _adminCommands;
       
 
-        public LtExecuter(IConsoleHelper consoleHelper, IUserService userService, IUserOptions userOptions, IAppSettings appSettings, IAdminCommands adminCommands)
+        public LtExecuter(IConsoleHelper consoleHelper, IUserService userService, IUserOptions userOptions,IAdminCommands adminCommands)
         {
             _consoleHelper = consoleHelper;
             _userService = userService;
             _userOptions = userOptions;
-            _appSettings = appSettings;
             _adminCommands = adminCommands;
         }
-
 
         public async void InitializeStart(string[] args)
         {
@@ -84,7 +81,6 @@ namespace ConsoleApp1.LoginApp.UserMethoden
                 _consoleHelper.Printer("");
                 _consoleHelper.Printer("bitte Geben Sie die richtige Taste ein ");
             }
-
             return examination;
         }
 
@@ -124,6 +120,7 @@ namespace ConsoleApp1.LoginApp.UserMethoden
                     break;
                 case UsersOptions.User:
                     await _userService.LoginUser();
+                    await _userService.SwitchToServices();
                     break;
                 default:
                     _consoleHelper.Printer("Wrong Input");
@@ -137,26 +134,34 @@ namespace ConsoleApp1.LoginApp.UserMethoden
             while (examination)
             {
                 var requeustoptions = _userOptions.AdminCommands();
-                _consoleHelper.Printer($"acess to D/Database or J/Jsonfiles");
-                var storagePath = _consoleHelper.ReadKey();
                 switch (requeustoptions)
                 {
                     case Adminrights.DeleteUsersOrAdmin:
-                        _consoleHelper.Printer("Folder: A/Admin or U/User");
-                        var folderPath = _consoleHelper.ReadKey();
+                        _consoleHelper.Printer($"acess to D/Database or J/Jsonfiles");
+                        var storagePath = _consoleHelper.ReadKey();
                         await StoragePath(
                             () => _adminCommands.DeleteUserOrAdminInDataBase(),
-                            () =>  _adminCommands.DeleteUserOrAdminFunction(() => _userService.ChooseFolderPath(folderPath.Key == ConsoleKey.A)),
+                            (folderType) => _adminCommands.DeleteUserOrAdminFunction(() => _userService.ChooseFolderPath(folderType == "Admin")),
                             storagePath);
                         break;
                     case Adminrights.DeleteAllUsers:
-                        await _adminCommands.DeleteAllUsersFromDataBase();
+                        _consoleHelper.Printer($"acess to D/Database or J/Jsonfiles");
+                        storagePath = _consoleHelper.ReadKey();
+                        await StoragePath(
+                             () => _adminCommands.DeleteAllUsersFromDataBase(),
+                             (folderType) => _adminCommands.DeleteAllUserFunction(() => _userService.ChooseFolderPath(folderType == "Admin")),
+                             storagePath);
                         break;
                     case Adminrights.OutputOfAllUsers:
                         await _consoleHelper.PrintAllUsersFromDataBase("User");
                         break;
                     case Adminrights.ChangeLoginData:
-                        await _adminCommands.ChangeLginDataInDatabase();
+                        _consoleHelper.Printer($"acess to D/Database or J/Jsonfiles");
+                        storagePath = _consoleHelper.ReadKey();
+                        await StoragePath(
+                             () => _adminCommands.ChangeLginDataInDatabase(),
+                             (folderType) => _adminCommands.ChangeLogData(() => _userService.ChooseFolderPath(folderType == "Admin")),
+                             storagePath);
                         break;
                     case Adminrights.AdminRightsExit:
                         examination = false;
@@ -168,9 +173,9 @@ namespace ConsoleApp1.LoginApp.UserMethoden
             }
         }
 
-        public static async Task StoragePath(
+        public async Task StoragePath(
             Func<Task> databaseMethod,
-            Action jsonFileMethod,
+            Action<string> jsonFileMethod,
             ConsoleKeyInfo storagePath)
         {
             if (storagePath.Key == ConsoleKey.D)
@@ -179,8 +184,10 @@ namespace ConsoleApp1.LoginApp.UserMethoden
             }
             else if(storagePath.Key == ConsoleKey.J)
             {
-               
-                jsonFileMethod();
+                _consoleHelper.Printer("Folder: A/Admin or U/User");
+                var folderPath = _consoleHelper.ReadKey();
+                var folderType = folderPath.Key == ConsoleKey.A ? "Admin" : "User";
+                jsonFileMethod(folderType);
             }
         }
     }

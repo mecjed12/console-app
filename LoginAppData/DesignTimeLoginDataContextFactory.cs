@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
+using Microsoft.EntityFrameworkCore.Proxies;
 
 
 namespace LoginAppData
@@ -17,7 +18,9 @@ namespace LoginAppData
             var connectionString = configuration.GetConnectionString("postgres");
 
             var optionBuilder = new DbContextOptionsBuilder<LoginDataContext>();
-            optionBuilder.UseNpgsql(connectionString);
+            optionBuilder
+                .UseLazyLoadingProxies()
+                .UseNpgsql(connectionString);
 
             return new LoginDataContext (optionBuilder.Options);
         }

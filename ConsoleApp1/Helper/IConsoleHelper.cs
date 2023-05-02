@@ -13,5 +13,7 @@ namespace ConsoleApp1.Helper
         Task PrintAllUsersFromDataBase(string accountype);
         ConsoleKeyInfo ReadKey();
         void AllOptionsPrinter<TEnum>() where TEnum : Enum;
+        void PrintTheToDoList(List<string> toDoList);
+        Task PrintAllToDoListFromDataBase();
     }
 }

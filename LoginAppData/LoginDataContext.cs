@@ -21,6 +21,7 @@ namespace LoginAppData
         }
 
         public DbSet<Account> Accounts { get; set; }
+        public DbSet<ToDoListModel> ToDoList { get; set; }
 
         public new int SaveChanges()
         {

@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ConsoleApp1.LoginApp.Tools
+namespace ConsoleApp1.LoginApp.Services.Weatherservices
 {
-    public  class WeatherProperties
+    public class WeatherProperties
     {
-        public string Date {  get; set; }
+        public string Date { get; set; }
         public long Temp { get; set; }
         public string Text { get; set; }
     }

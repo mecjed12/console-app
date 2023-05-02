@@ -87,5 +87,29 @@ namespace ConsoleApp1.Helper
                 Console.WriteLine($" {i} for {temp[i]}");
             }
         }
+
+        public void PrintTheToDoList(List<string> toDoList)
+        {
+            DateTime currrentDate = DateTime.Now;
+            string formattedDate = currrentDate.ToString("dddd - MMMM dd, yyyy");
+            Printer(formattedDate);
+
+            for(int i = 0;i < toDoList.Count; i++)
+            {
+                Printer($"{i + 1}: {toDoList[i]}");
+            }
+        }
+
+        public async Task PrintAllToDoListFromDataBase()
+        {
+            var lists = await _loginDataContext.ToDoList
+                        .Where(o => o.ListId > 0)
+                        .ToListAsync ();
+
+            foreach (var list in lists)
+            {
+                Printer($" Id: {list.ListId} , Name: {list.ListName}");
+            }
+        }
     }
 }
