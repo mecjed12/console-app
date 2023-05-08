@@ -34,6 +34,9 @@ namespace LoginAppData
         [Column("created_at")]
         public DateTime? CreatedAt { get; set; }
 
+        [Column("completed")]
+        public bool Completed { get; set; }
+
         [ForeignKey("ListId")]
         public int ListId { get; set; }
 

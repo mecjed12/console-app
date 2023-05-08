@@ -1,4 +1,6 @@
 ﻿
+using LoginAppData;
+
 namespace ConsoleApp1.Helper
 {
     public interface IConsoleHelper
@@ -14,6 +16,7 @@ namespace ConsoleApp1.Helper
         ConsoleKeyInfo ReadKey();
         void AllOptionsPrinter<TEnum>() where TEnum : Enum;
         void PrintTheToDoList(List<string> toDoList);
-        Task PrintAllToDoListFromDataBase();
+        Task PrintAllToDoListsFromDataBase();
+        Task PrintAllItemsOfToDoList(ToDoListModel toDoListModel);
     }
 }

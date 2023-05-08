@@ -3,6 +3,7 @@ using System;
 using LoginAppData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LoginAppData.Migrations
 {
     [DbContext(typeof(LoginDataContext))]
-    partial class LoginDataContextModelSnapshot : ModelSnapshot
+    [Migration("20230505074605_newLTDataBase")]
+    partial class newLTDataBase
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -36,7 +39,7 @@ namespace LoginAppData.Migrations
 
                     b.Property<bool>("AccountType")
                         .HasColumnType("boolean")
-                        .HasColumnName("Admin_status");
+                        .HasColumnName("account_type");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone")
@@ -68,10 +71,6 @@ namespace LoginAppData.Migrations
                         .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseSerialColumn(b.Property<int>("ItemId"));
-
-                    b.Property<bool>("Completed")
-                        .HasColumnType("boolean")
-                        .HasColumnName("completed");
 
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("timestamp with time zone")

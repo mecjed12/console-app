@@ -7,6 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="EntityFrameworkCore.Testing.Moq" Version="5.0.0" />
+    <PackageReference Include="EPPlus" Version="6.2.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="7.0.5" />
   </ItemGroup>
 

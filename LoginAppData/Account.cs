@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using SharedLibary;
+
 namespace LoginAppData
 {
     [Table("accounts")]
@@ -21,7 +19,10 @@ namespace LoginAppData
         [Column("date")]
         public DateTime CreatedAt { get; set; }
 
-        [Column("account_type")]
+        [Column("safety_word")]
+        public string SafteyWord { get; set; }
+
+        [Column("Admin_status")]
         public bool AccountType { get; set; }
     }
 }

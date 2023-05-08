@@ -4,5 +4,6 @@
     {
         string RegistryName();
         int RegistryPassword();
+        string RegistrySecureWord();
     }
 }

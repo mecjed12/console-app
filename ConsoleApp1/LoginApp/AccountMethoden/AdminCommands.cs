@@ -1,14 +1,7 @@
-﻿
-
-using ConsoleApp1.Helper;
-using ConsoleApp1.LoginApp.AccountMethoden.UserInformation;
+﻿using ConsoleApp1.Helper;
 using LoginAppData;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Storage;
 using Newtonsoft.Json;
-using ScottPlot.Renderable;
-using System.Collections.Generic;
 
 namespace ConsoleApp1.LoginApp.AccountMethoden
 {
@@ -34,7 +27,7 @@ namespace ConsoleApp1.LoginApp.AccountMethoden
                 _consoleHelper.Printer("There is no User");
                 return;
             }
-            var users = userFiles.Select(userFile => JsonConvert.DeserializeObject<Users>(File.ReadAllText(userFile))).ToList();
+            var users = userFiles.Select(userFile => JsonConvert.DeserializeObject<Account>(File.ReadAllText(userFile))).ToList();
             users.ForEach(user => _consoleHelper.Printer($"{index ++}. Username: {user.Name}, Passwort: {user.Password}"));
 
             _consoleHelper.Printer("Wählen Sie den User aus, den Sie löschen möchten (geben Sie die Nummer ein)");
@@ -54,7 +47,7 @@ namespace ConsoleApp1.LoginApp.AccountMethoden
         public void DeleteAllUserFunction(Func<string> chooseFolderPath)
         {
             string[] userFiles = Directory.GetFiles(chooseFolderPath(), "*.json");
-            var users = userFiles.Select(userFile => JsonConvert.DeserializeObject<Users>(File.ReadAllText(userFile))).ToList() ;
+            var users = userFiles.Select(userFile => JsonConvert.DeserializeObject<Account>(File.ReadAllText(userFile))).ToList() ;
             users.ForEach(user => _consoleHelper.Printer($"Username: {user.Name}, Passwort: {user.Password}"));
 
             userFiles.ToList().ForEach(file => File.Delete(file));
@@ -65,7 +58,7 @@ namespace ConsoleApp1.LoginApp.AccountMethoden
         {
             var index = 0;
             string[] userFiles = Directory.GetFiles(chooseFolderPath(), "*.json");
-            var users = userFiles.Select(userFile => JsonConvert.DeserializeObject<Users>(File.ReadAllText(userFile))).ToList();
+            var users = userFiles.Select(userFile => JsonConvert.DeserializeObject<Account>(File.ReadAllText(userFile))).ToList();
             users.ForEach(user => _consoleHelper.Printer($"{index ++}, Username: {user.Name}, Passwort: {user.Password}"));
 
             _consoleHelper.Printer("Wählen Sie den User aus, den Sie LoginData ändern möchten (geben Sie die Nummer ein)");
@@ -78,7 +71,7 @@ namespace ConsoleApp1.LoginApp.AccountMethoden
                 {
                     _consoleHelper.Printer("Den neuename eingäben");
                     var newUsername = _consoleHelper.ReadInput();
-                    Users selectedUser = users[selectIndex];
+                    Account selectedUser = users[selectIndex];
                     selectedUser.Name = newUsername;
                     _fileHelper.WriteNewDataInTheJsonFile("Username", selectedUser, selectIndex, userFiles);
                 }
@@ -86,7 +79,7 @@ namespace ConsoleApp1.LoginApp.AccountMethoden
                 {
                     _consoleHelper.Printer("Geben sie neue Passwort ein");
                     var newPassword = _consoleHelper.IntConvertor_String(_consoleHelper.ReadInput());
-                    Users selectedUser = users[selectIndex];
+                    Account selectedUser = users[selectIndex];
                     selectedUser.Password = newPassword;
                     _fileHelper.WriteNewDataInTheJsonFile("Password", selectedUser, selectIndex, userFiles);
                 }

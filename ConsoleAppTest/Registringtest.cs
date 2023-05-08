@@ -1,6 +1,6 @@
 ﻿using ConsoleApp1.Helper;
 using ConsoleApp1.LoginApp.Registrie;
-using ConsoleApp1.LoginApp.UserMethoden;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
 namespace ConsoleAppTest
@@ -14,8 +14,7 @@ namespace ConsoleAppTest
 
             //arrange
             var consolHelperMock = new Mock<IConsoleHelper>();
-            var registringMock = new Mock<IRegistring>();
-            Registring registring = new Registring(consolHelperMock.Object);
+            var registring = new Registring (consolHelperMock.Object); 
             var sequence = new MockSequence();
             consolHelperMock.InSequence(sequence).Setup(o =>o.ReadInput()).Returns(" ");
             consolHelperMock.InSequence(sequence).Setup(o => o.ReadInput()).Returns("name");
@@ -32,8 +31,7 @@ namespace ConsoleAppTest
 
             //arrange
             var consolHelperMock = new Mock<IConsoleHelper>();
-            var registringMock = new Mock<IRegistring>();
-            Registring registring = new Registring(consolHelperMock.Object);
+            var registring = new Registring(consolHelperMock.Object);
             var sequence = new MockSequence();
             consolHelperMock.InSequence(sequence).Setup(o => o.ReadInput()).Returns("1");
             consolHelperMock.InSequence(sequence).Setup(o => o.ReadInput()).Returns("name");
@@ -47,11 +45,9 @@ namespace ConsoleAppTest
         [TestMethod]
         public void Registring_RegistringPassword_PassswordisNotNUllTest()
         {
-
             //arrange
             var consolHelperMock = new Mock<IConsoleHelper>();
-            var registringMock = new Mock<IRegistring>();
-            Registring registring = new Registring(consolHelperMock.Object);
+            var registring = new Registring(consolHelperMock.Object);
             var sequence = new MockSequence();
             consolHelperMock.InSequence(sequence).Setup(o => o.ReadInput()).Returns(" ");
             consolHelperMock.InSequence(sequence).Setup(o => o.ReadInput()).Returns("12");

@@ -1,7 +1,5 @@
 ﻿using ConsoleApp1.Helper;
-using ConsoleApp1.LoginApp.Registrie;
 using SharedLibary;
-using System.Security.Cryptography.X509Certificates;
 using static ConsoleApp1.LoginApp.Registrie.EnumOptions;
 
 namespace ConsoleApp1.LoginApp.UserMethoden

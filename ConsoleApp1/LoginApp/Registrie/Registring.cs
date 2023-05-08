@@ -1,21 +1,22 @@
 ﻿using ConsoleApp1.Helper;
+using System.Text.RegularExpressions;
 
 namespace ConsoleApp1.LoginApp.Registrie
 {
     public class Registring : IRegistring
     {
 
-        private readonly IConsoleHelper consoleHelper;
+        private readonly IConsoleHelper _consoleHelper;
 
         public Registring(IConsoleHelper consoleHelper)
         {
-            this.consoleHelper = consoleHelper;
+            _consoleHelper = consoleHelper;
         }
 
         public string RegistryName()
         {
-            consoleHelper.Printer("Bitte geben Sie Ihre Namen ein ");
-            var name = consoleHelper.ReadInput();
+            _consoleHelper.Printer("Please enter your names");
+            var name = _consoleHelper.ReadInput();
             int numberComparator;
             bool nameIsWrong = true;
             while (nameIsWrong)
@@ -24,9 +25,9 @@ namespace ConsoleApp1.LoginApp.Registrie
                 {
                     if (int.TryParse(name, out numberComparator))
                     {
-                        consoleHelper.Printer("Bitte geben sie Buchstaben und keine nummern ein\n");
-                        consoleHelper.Printer("Bitte geben Sie Ihre Namen ein ");
-                        name = consoleHelper.ReadInput();
+                        _consoleHelper.Printer("Please enter letters and no numbers\n");
+                        _consoleHelper.Printer("Please enter your names ");
+                        name = _consoleHelper.ReadInput();
                     }
                     else
                     {
@@ -35,8 +36,8 @@ namespace ConsoleApp1.LoginApp.Registrie
                 }
                 else
                 {
-                    consoleHelper.Printer("Falsche Eingabe. Bitte Geben Sie Ihren Namen erneut ein");
-                    name = consoleHelper.ReadInput();
+                    _consoleHelper.Printer("Wrong input. Please re-enter your name");
+                    name = _consoleHelper.ReadInput();
                 }
             }
             return name;
@@ -44,8 +45,7 @@ namespace ConsoleApp1.LoginApp.Registrie
 
         public int RegistryPassword()
         {
-            consoleHelper.Printer("Bitte geben Sie ihr gewünschtes Passwort ein ");
-            var password = consoleHelper.ReadInput();
+            var password = _consoleHelper.ReadInput();
             int numberComparator;
             bool numberIsWrong = true;
             while (numberIsWrong)
@@ -58,13 +58,36 @@ namespace ConsoleApp1.LoginApp.Registrie
                     }
                     else
                     {
-                        consoleHelper.Printer("Bitte geben sie eine Nummer und keinen Buchstaben ein\n");
-                        consoleHelper.Printer("Bitte geben Sie ihr gewünschtes Passwort ein ");
-                        password = consoleHelper.ReadInput();
+                        _consoleHelper.Printer("Please enter a number and not a letter\n");
+                        _consoleHelper.Printer("Please enter your desired password ");
+                        password = _consoleHelper.ReadInput();
                     }
                 }
             }
-            return consoleHelper.IntConvertor_String(password);
+            return _consoleHelper.IntConvertor_String(password);
+        }
+
+        public string RegistrySecureWord()
+        {
+            _consoleHelper.Printer("Enter you SecureWord \n What is the name of you puppy");
+            var secureWord = _consoleHelper.ReadInput();
+            var secureWordRegex = "^[a-zA-Z]+$";
+            bool loopCheck = true;
+            while (loopCheck)
+            {
+                if (!string.IsNullOrWhiteSpace(secureWord))
+                {
+                    if (Regex.IsMatch(secureWord, secureWordRegex))
+                    {
+                        loopCheck = false;
+                    }
+                    else
+                    {
+                        _consoleHelper.Printer("Enter letters no signs or numbers");
+                    }
+                }
+            }
+            return secureWord;
         }
     }
 }

@@ -1,13 +1,12 @@
 ﻿using ConsoleApp1.Helper;
 using ConsoleApp1.LoginApp.Registrie;
-using Newtonsoft.Json;
 using ConsoleApp1.Config;
 using LoginAppData;
 using Microsoft.EntityFrameworkCore;
-using static ConsoleApp1.LoginApp.Registrie.EnumOptions;
 using SharedLibary;
 using ConsoleApp1.LoginApp.Services.Weatherservices;
 using ConsoleApp1.LoginApp.Services.To_doListService;
+using System.Text.RegularExpressions;
 
 namespace ConsoleApp1.LoginApp.UserMethoden
 {
@@ -37,7 +36,15 @@ namespace ConsoleApp1.LoginApp.UserMethoden
             try
             {
                 var userName = _registring.RegistryName();
+                var existingUserName = await CheckIfUserExists(userName);
+                if (existingUserName)
+                {
+                    _consoleHelper.Printer("This User Existing");
+                    return;
+                }
+                _consoleHelper.Printer("Enter you Password");
                 var password = _registring.RegistryPassword();
+                var secureWord = _registring.RegistrySecureWord();
                 _consoleHelper.Printer("You have registring successfully");
                 var adminCondition = (usersOptions == UsersOptions.Admin);
                 var newAccount = new Account
@@ -45,6 +52,7 @@ namespace ConsoleApp1.LoginApp.UserMethoden
                     Name = userName,
                     Password = password,
                     CreatedAt = DateTime.UtcNow.AddHours(1),
+                    SafteyWord = secureWord,
                     AccountType = adminCondition,
                 };
                 _consoleHelper.Printer("Save in D/(Database) or as J/(JsonFile)");
@@ -95,8 +103,14 @@ namespace ConsoleApp1.LoginApp.UserMethoden
             return userFiles;
         }
 
+        public async Task<bool> CheckIfUserExists(string input)
+        {
+            var userfiles = await _loginDataContext.Accounts
+                            .FirstOrDefaultAsync(o => o.Name == input);
+            return userfiles != null;
+        }
 
-        public Task<bool> PasswordCheckOver(Account account)
+        public async Task<bool> PasswordCheckOver(Account account)
         {
             _consoleHelper.Printer("Bitte geben sie Jetz ihr passwort ein\n Sie haben 3 versuche");
             for (int i = 0; i < 3; i++)
@@ -108,7 +122,7 @@ namespace ConsoleApp1.LoginApp.UserMethoden
                     if (convertetPassword == account.Password)
                     {
                         _consoleHelper.Printer("Sie haben sich erflogreich Angemeldet");
-                        return Task.FromResult(true);
+                        return true;
                     }
                     else
                     {
@@ -122,7 +136,8 @@ namespace ConsoleApp1.LoginApp.UserMethoden
                 }
             }
             _consoleHelper.Printer("Anmeldung fehlgeschlagen");
-            return Task.FromResult(false);
+            await SecureWordCheckOver(account);
+            return false;
         }
 
         public async Task<bool> SwitchToServices()
@@ -154,6 +169,31 @@ namespace ConsoleApp1.LoginApp.UserMethoden
         public string ChooseFolderPath(bool options)
         {
             return options ? _settings.AdminFolderPath : _settings.UsersFolderPath;
+        }
+
+        public  async Task<bool> SecureWordCheckOver(Account account)
+        {
+            _consoleHelper.Printer("Forget you password?\n You will reset you password: Y/N");
+            var forgotPasswordCheck = _consoleHelper.ReadKey();
+            if(forgotPasswordCheck.Key == ConsoleKey.Y) 
+            {
+                _consoleHelper.Printer("SecureWord:");
+                var checkTheSecureWord = _consoleHelper.ReadInput();
+                var secureWordRegex = "^[a-zA-Z]+$";
+                if (Regex.IsMatch(checkTheSecureWord, secureWordRegex) && checkTheSecureWord == account.SafteyWord)
+                {
+                    _consoleHelper.Printer("Enter new Password");
+                    var newPassword = _registring.RegistryPassword();
+                    account.Password = newPassword;
+                    await _loginDataContext.SaveChangesAsync();
+                    return true;
+                }
+            }
+            else if (forgotPasswordCheck.Key == ConsoleKey.N)
+            {
+                _consoleHelper.Printer("Ok Bye ");
+            }
+            return false;
         }
     }
 }

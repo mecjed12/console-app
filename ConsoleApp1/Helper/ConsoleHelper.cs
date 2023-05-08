@@ -1,9 +1,6 @@
-﻿using ConsoleApp1.LoginApp.AccountMethoden.UserInformation;
-using ConsoleApp1.LoginApp.Registrie;
-using LoginAppData;
+﻿using LoginAppData;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using static ConsoleApp1.LoginApp.Registrie.EnumOptions;
 
 namespace ConsoleApp1.Helper
 {
@@ -39,7 +36,7 @@ namespace ConsoleApp1.Helper
         public void PrintAllUsersFromJsonFIles(Func<string> folderPath)
         {
             string[] userFiles = Directory.GetFiles(folderPath(), "*.json");
-            var users = userFiles.Select(userFile => JsonConvert.DeserializeObject<Users>(File.ReadAllText(userFile))).ToList();
+            var users = userFiles.Select(userFile => JsonConvert.DeserializeObject<Account>(File.ReadAllText(userFile))).ToList();
             if (users.Count > 0)
             {
                  users.ForEach(user => Console.WriteLine($"Username : {user?.Name}, Passwort : {user?.Password} "));
@@ -100,7 +97,7 @@ namespace ConsoleApp1.Helper
             }
         }
 
-        public async Task PrintAllToDoListFromDataBase()
+        public async Task PrintAllToDoListsFromDataBase()
         {
             var lists = await _loginDataContext.ToDoList
                         .Where(o => o.ListId > 0)
@@ -109,6 +106,29 @@ namespace ConsoleApp1.Helper
             foreach (var list in lists)
             {
                 Printer($" Id: {list.ListId} , Name: {list.ListName}");
+            }
+        }
+
+        public async Task PrintAllItemsOfToDoList(ToDoListModel toDoListModel)
+        {
+            var lists = await _loginDataContext.ToDoList
+                              .Include(o => o.Items)
+                              .Where(o => o.ListId == toDoListModel.ListId)
+                              .ToListAsync();
+            if(lists.Count > 0)
+            {
+                foreach( var list in lists)
+                {
+                    Printer($"List id: {list.ListId}");
+                    foreach(var item in list.Items)
+                    {
+                        Printer($"Itemid: {item.ItemId} , Task: {item.Task}, Completed: {item.Completed}");
+                    }
+                }
+            }
+            else
+            {
+                Printer("No items in the list");
             }
         }
     }

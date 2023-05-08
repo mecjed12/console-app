@@ -1,7 +1,5 @@
-﻿using ConsoleApp1.Config;
-using ConsoleApp1.Helper;
+﻿using ConsoleApp1.Helper;
 using ConsoleApp1.LoginApp.AccountMethoden;
-using ScottPlot.Control;
 using SharedLibary;
 using static ConsoleApp1.LoginApp.Registrie.EnumOptions;
 
@@ -43,14 +41,15 @@ namespace ConsoleApp1.LoginApp.UserMethoden
                                 break;
 
                             case Options.NeuerUserRegestrieren:
-                                RegistringCases();
+                               Task.Run(async() => await RegistringCases()).Wait();
+                                examination = await CheckYesNoInput(examination);
                                 break;
 
                             case Options.Login:
-                                Task.Run(async() => await LoginCase()).Wait();
+                               Task.Run(async() => await LoginCase()).Wait();
+                                examination = await CheckYesNoInput(examination);
                                 break;
                         }
-                        examination = CheckYesNoInput(examination); 
                     }
                 }
                 else
@@ -61,7 +60,7 @@ namespace ConsoleApp1.LoginApp.UserMethoden
             }
         }
 
-        public bool CheckYesNoInput(bool examination)
+        public async Task<bool> CheckYesNoInput(bool examination)
         {
             _consoleHelper.Printer("Wollen sie fortfahren Y = weiter und N = für Nein");
             ConsoleKeyInfo checkKey = _consoleHelper.ReadKey();
@@ -84,16 +83,16 @@ namespace ConsoleApp1.LoginApp.UserMethoden
             return examination;
         }
 
-        public void RegistringCases()
+        public async Task RegistringCases()
         {
             var requestOptions = _userOptions.AccountsOptions();
             switch(requestOptions)
             {
                 case UsersOptions.Admin:
-                    _userService.CreateUser(UsersOptions.Admin);
+                    await _userService.CreateUser(UsersOptions.Admin);
                     break;
                 case UsersOptions.User:
-                    _userService.CreateUser(UsersOptions.User);
+                    await _userService.CreateUser(UsersOptions.User);
                     break;
                 default:
                     _consoleHelper.Printer("Wrong Input");
@@ -119,8 +118,10 @@ namespace ConsoleApp1.LoginApp.UserMethoden
                     }
                     break;
                 case UsersOptions.User:
-                    await _userService.LoginUser();
-                    await _userService.SwitchToServices();
+                    if(await _userService.LoginUser())
+                    {
+                        await _userService.SwitchToServices();
+                    }
                     break;
                 default:
                     _consoleHelper.Printer("Wrong Input");

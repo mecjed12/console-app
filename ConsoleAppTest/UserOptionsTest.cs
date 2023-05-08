@@ -3,6 +3,7 @@ using ConsoleApp1.LoginApp.UserMethoden;
 using ConsoleApp1.LoginApp.Registrie;
 using ConsoleApp1.Helper;
 using Microsoft.Extensions.Options;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ConsoleAppTest
 {

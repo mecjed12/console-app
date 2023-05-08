@@ -1,13 +1,6 @@
 ﻿using ConsoleApp1.Config;
-using ConsoleApp1.LoginApp.AccountMethoden.UserInformation;
 using LoginAppData;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace ConsoleApp1.Helper
 {
@@ -42,7 +35,7 @@ namespace ConsoleApp1.Helper
             var userFileName = Path.Combine(path, $"{users.Name}_{timeTamp}.json");
             WriteObjectToJson(users, userFileName);
         }
-        public void WriteNewDataInTheJsonFile(string message, Users selectedUser, int selectedIndex, string[] userFiles)
+        public void WriteNewDataInTheJsonFile(string message, Account selectedUser, int selectedIndex, string[] userFiles)
         {
             var file = userFiles[selectedIndex];
             File.WriteAllText(file, JsonConvert.SerializeObject(selectedUser));
