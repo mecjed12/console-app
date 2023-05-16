@@ -15,6 +15,12 @@
     {
         "Entry"
         {
+        "MsmKey" = "8:_C71AF3127B7541A9A0653B3D45151124"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_E6591E8A96834E879842C900E420695B"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -70,10 +76,40 @@
         {
             "LaunchCondition"
             {
+                "{A06ECF26-33A3-4562-8140-9B0E340D4F24}:_4A3080DFBE1E4F1CA8135A0E5E5A4B70"
+                {
+                "Name" = "8:.NET Core"
+                "Message" = "8:[VSDNETCOREMSG]"
+                "AllowLaterVersions" = "11:FALSE"
+                "InstallUrl" = "8:https://dotnet.microsoft.com/download/dotnet-core/[NetCoreVerMajorDotMinor]"
+                "IsNETCore" = "11:TRUE"
+                "Architecture" = "2:0"
+                "Runtime" = "2:0"
+                }
             }
         }
         "File"
         {
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C71AF3127B7541A9A0653B3D45151124"
+            {
+            "SourcePath" = "8:..\\..\\..\\..\\..\\Downloads\\files_android_system_blue_smartphone_icon_252211.ico"
+            "TargetName" = "8:files_android_system_blue_smartphone_icon_252211.ico"
+            "Tag" = "8:"
+            "Folder" = "8:_21C36B1F2F394634BCE60E5E64B6D0EE"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
         }
         "FileType"
         {
@@ -131,7 +167,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:LoginAppSetup"
         "ProductCode" = "8:{73D61CDB-0F85-498C-BC48-0158535BCCCD}"
-        "PackageCode" = "8:{2BB4B113-7F20-4C20-98FE-AAECE4CD9C2C}"
+        "PackageCode" = "8:{1489D4E1-E955-4201-9AE3-081522EA16FB}"
         "UpgradeCode" = "8:{AD63E634-3C49-48F2-B6ED-73E83452576F}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
@@ -251,6 +287,34 @@
         }
         "Shortcut"
         {
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_6EE00C625ACE47A78DD7D5A61735E2C5"
+            {
+            "Name" = "8:LoginApp"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_E6591E8A96834E879842C900E420695B"
+            "Folder" = "8:_C64F88E55D4644DBAEDDB49A4C0FBC7C"
+            "WorkingFolder" = "8:_21C36B1F2F394634BCE60E5E64B6D0EE"
+            "Icon" = "8:_C71AF3127B7541A9A0653B3D45151124"
+            "Feature" = "8:"
+            }
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_B4192D2E343A48C9A4CE97DC01AF3FB8"
+            {
+            "Name" = "8:LoginApp"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_E6591E8A96834E879842C900E420695B"
+            "Folder" = "8:_A1A2954A855A49F98E7032F279361156"
+            "WorkingFolder" = "8:_21C36B1F2F394634BCE60E5E64B6D0EE"
+            "Icon" = "8:_C71AF3127B7541A9A0653B3D45151124"
+            "Feature" = "8:"
+            }
         }
         "UserInterface"
         {
