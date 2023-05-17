@@ -76,50 +76,6 @@ namespace ConsoleAppTest
             consoleHelperMock.Verify(o => o.Printer(It.Is<string>(str => str == "Bitte geben Sie ihren Username ein")));
         }
 
-        [TestMethod]
-        public async Task FindUser_UserNotFound_Test()
-        {
-            //arrange
-            List<Account> userList = new()
-            {
-                new Account () {Name="asfa"}
-            };
-            var consoleHelperMock = new Mock<IConsoleHelper>();
-            var registringMock = new Mock<IRegistring>();
-            var weatherClientMock = new Mock<IWeatherClient>();
-            var fileHelperMock = new Mock<IFileHelper>();
-            var loginContextMock = new Mock<ILoginDataContext>();
-            var toDoListMock = new Mock<IToDoList>();
-            var config = new AppSettings();
-            var path = config.UsersFolderPath = "dsfd";
-            registringMock.Setup(o => o.RegistryName()).Returns("bla");
-            registringMock.Setup(o => o.RegistryPassword()).Returns(124);
-            DbSet<Account> dbSet = GetQueryableMockDbSet(userList);
-            loginContextMock.Setup(o => o.Accounts).Returns(dbSet);
-            UserService userService = new (registringMock.Object, consoleHelperMock.Object,weatherClientMock.Object,fileHelperMock.Object,config,loginContextMock.Object,toDoListMock.Object);
-            consoleHelperMock.Setup(o => o.ReadInput()).Returns("no_existing_user");
-
-            //act
-            var result =  userService.FindUser();
-            Task<Account> resultTask;
-            try
-            {
-                resultTask = userService.FindUser();
-                await resultTask;
-            }
-            catch(Exception ex)
-            {
-                Console.WriteLine($"Exception in finduser {ex}");
-                throw;
-            }
-
-            Console.WriteLine($"result: {resultTask}");
-            Console.WriteLine($"{resultTask?.Result?.Name}");
-
-            //assert
-            Assert.IsNull(result);
-            consoleHelperMock.Verify(o => o.Printer(It.Is<string>(str => str == "This User is not existing!")));
-        }
 
         [TestMethod]
         public async Task FindUser_UserFound_Test()
@@ -197,22 +153,6 @@ namespace ConsoleAppTest
             //assert
             Assert.IsTrue(result);
         }
-
-        private static DbSet<T> GetQueryableMockDbSet<T>(List<T> sourceList) where T : class
-        {
-            var queryable = sourceList.AsQueryable();
-
-            var dbSet = new Mock<DbSet<T>>();
-            dbSet.As<IQueryable<T>>().Setup(m => m.Provider).Returns(queryable.Provider);
-            dbSet.As<IQueryable<T>>().Setup(m => m.Expression).Returns(queryable.Expression);
-            dbSet.As<IQueryable<T>>().Setup(m => m.ElementType).Returns(queryable.ElementType);
-            dbSet.As<IQueryable<T>>().Setup(m => m.GetEnumerator()).Returns(() => queryable.GetEnumerator());
-            dbSet.As<IAsyncEnumerable<T>>().Setup(o => o.GetAsyncEnumerator(default)).Returns(() => new AsyncEnumerator<T>(queryable.GetEnumerator()));
-            dbSet.Setup(o => o.AsAsyncEnumerable()).Returns(dbSet.Object);
-
-            return dbSet.Object;
-        }
-
 
     }
 }

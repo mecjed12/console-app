@@ -12,11 +12,27 @@
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
+    using System.Text.Json;
 
     public static class Programm
     {
         public static void Main(string[] args)
         {
+            var appSettingsPath = Path.Combine(Path.GetDirectoryName(typeof(Programm).Assembly.Location)!, "appsettings.json");
+            var jsonString = File.ReadAllText(appSettingsPath);
+
+            try
+            {
+                using (JsonDocument doc = JsonDocument.Parse(jsonString))
+                {
+                    Console.WriteLine("Succsefully parse");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Failed to pars" + ex.ToString());
+            }
+
             var configurationBuilder = new ConfigurationBuilder()
                 .SetBasePath(Path.GetDirectoryName(typeof(Programm).Assembly.Location)!)
                 .AddJsonFile("appsettings.json", false);
